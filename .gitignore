@@ -1,0 +1,4 @@
+*.pb
+1recog_facenet/models/facenet/
+1recog_facenet/logs/facenet/
+data/

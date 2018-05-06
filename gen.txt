@@ -1,0 +1,23 @@
+HAAR STATS: AR Face
+	135 classes (w/0 w-006), 0000 input imgs (face detected by HAAR)
+	HAAR average (x,y, w,h): 00 00 00 00
+	Fraction of total image (%x %y %area)
+
+HAAR STATS: DISGUISE
+	75 classes, 1768 input imgs (including fp) (face detected by HAAR)
+	HAAR average (x,y, w,h):  137,125 182,182
+	Fraction of total image (%x %y %area)
+
+HAAR STATS: PLASTIC
+	900 classes, 1790 input imgs (including fp) (face detected by HAAR)
+	HAAR average (x,y, w,h):  79,58 182,182
+	Fraction of total image (%x %y %area)
+
+HAAR STATS: AR Face-Nose
+	('total detected: ', 2975)
+	('av x, y: ', 195, 192)
+
+
+
+PAPERS TO READ
+	https://pdfs.semanticscholar.org/d78b/6a5b0dcaa81b1faea5fb0000045a62513567.pdf

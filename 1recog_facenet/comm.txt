@@ -1,0 +1,89 @@
+https://github.com/davidsandberg/facenet
+https://github.com/davidsandberg/facenet/issues/134
+
+
+##################
+nohup tensorboard --logdir=logs/facenet --port 6006 > /dev/null 2>&1 &
+
+
+##################
+python 1haar.py
+python 2folderStructure.py
+delete w-006
+python 3trainTestSplit.py
+
+
+##################
+python src/train_softmax.py --logs_base_dir logs/facenet/ --models_base_dir models/facenet/ --data_dir data/AR_FaceDB_haarNose_network --image_size 160 --model_def models.inception_resnet_v1 --optimizer RMSPROP --learning_rate -1 --max_nrof_epochs 80 --keep_probability 0.8 --random_crop --random_flip --learning_rate_schedule_file data/learning_rate_schedule_classifier_casia.txt --weight_decay 5e-5 --center_loss_factor 1e-2 --center_loss_alfa 0.9 --epoch_size 1000 --log_histograms --batch_size 16
+
+python src/train_softmax.py --logs_base_dir logs/facenet/ --models_base_dir models/facenet/ --data_dir data/disguise_haarNose_network --image_size 160 --model_def models.inception_resnet_v1 --optimizer RMSPROP --learning_rate -1 --max_nrof_epochs 80 --keep_probability 0.8 --random_crop --random_flip --learning_rate_schedule_file data/learning_rate_schedule_classifier_casia.txt --weight_decay 5e-5 --center_loss_factor 1e-2 --center_loss_alfa 0.9 --epoch_size 1000 --log_histograms --batch_size 16
+
+python src/train_softmax.py --logs_base_dir logs/facenet/ --models_base_dir models/facenet/ --data_dir data/plasticSurgery_haarNose_network --image_size 160 --model_def models.inception_resnet_v1 --optimizer RMSPROP --learning_rate -1 --max_nrof_epochs 80 --keep_probability 0.8 --random_crop --random_flip --learning_rate_schedule_file data/learning_rate_schedule_classifier_casia.txt --weight_decay 5e-5 --center_loss_factor 1e-2 --center_loss_alfa 0.9 --epoch_size 1000 --log_histograms --batch_size 16
+
+python src/train_softmax.py --logs_base_dir logs/facenet/ --models_base_dir models/facenet/ --data_dir data/AR_FaceDB_haarFace_network --image_size 160 --model_def models.inception_resnet_v1 --optimizer RMSPROP --learning_rate -1 --max_nrof_epochs 80 --keep_probability 0.8 --random_crop --random_flip --learning_rate_schedule_file data/learning_rate_schedule_classifier_casia.txt --weight_decay 5e-5 --center_loss_factor 1e-2 --center_loss_alfa 0.9 --epoch_size 1000 --log_histograms --batch_size 16
+
+python src/freeze_graph.py models/facenet/20180501-001222/ models/model-20180501-001222.pb
+
+
+##################
+python src/classifier_mod.py models/model-20180416-231621.pb > models/model-20180416-231621_test.txt
+python src/classifier_mod_disguise.py models/model-20180422-113901.pb > models/model-20180422-113901_test.txt
+python src/classifier_mod_plastic.py models/model-20180422-125750.pb > models/model-20180422-125750_test.txt 		---fixerror
+python src/classifier_mod_face.py models/model-20180501-001222.pb > models/model-20180501-001222_test.txt
+
+python3 -W ignore 4analysis.py > out_metrics.txt
+
+
+
+################## AR DATSET: NOSE
+------------------
+each class equi prob
+network: 70% 
+traintest: 70% - 30% (70% same as above)
+------------------
+model-20180408-032351_test_intermediate
+Accuracy: 0.95
+
+------------------
+network: 50%
+traintest: 50% - 50% (50% of remaining from above)
+------------------
+model-20180416-231621
+prec, acc, tpr, fpr     :  81.35033784284789 78.36438923395445 78.6270859836863 13.380957314006187
+equal err rate          :  8.592132505175986
+half total err rate     :  8.662046908315567
+
+
+
+################## DISGUISE DATASET
+------------------
+network: 50%
+traintest: 50% - 50% (50% of remaining from above)
+------------------
+model-20180422-113901	disguise_haarNose_folder not cleaned of fp
+prec, acc, tpr, fpr     :  28.187119165075114 31.941544885177453 49.76675469618838 46.62959126879097
+equal err rate          :  46.744343508435364
+half total err rate     :  46.858601816848164
+
+
+
+################## PLASTIC SURGERY DATASET
+------------------
+subject wise 0-449 nn, ...
+network: 50%
+traintest: 50% - 50% (50% of remaining from above)
+------------------
+model-20180422-125750	plasticSurgery_haarNose_folder not cleaned of fp
+prec, acc       :  0.16853932584269662 0.44943820224719105
+
+
+
+################## AR DATSET: FACE-NOSE
+------------------
+network: 50%
+traintest: 50% - 50% (50% of remaining from above)
+------------------
+model-20180501-001222
+prec, acc, tpr, fpr     :  88.0872820057 88.6310904872 94.1560384575 46.1053789456
+equal err rate          :  5.15375558403
+half total err rate     :  5.18708660872
